@@ -1,0 +1,83 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+    <h3><?= $this->helloTitle ?></h3>
+    <p><?= $this->helloText ?></p>
+
+
+
+<?php
+
+$this->import('Database');
+
+$countries = array();
+    
+    $result = $this->Database->prepare("SELECT DISTINCT country FROM tl_distributors")->execute();
+
+$options = '<option value="">-</option>';
+
+    while($result->next())
+    {
+        $option = '<option value="'.$result->country.'">'.$result->country.'</option>';
+        $options .= $option;
+    }
+
+
+?>
+
+<form method="get" enctype="application/x-www-form-urlencoded">
+    <div class="formbody">
+                  
+<!-- TEMPLATE START: vendor/contao/core-bundle/src/Resources/contao/templates/forms/form_select.html5 -->
+
+<div class="widget widget-select select">
+    <label for="ctrl_1" class="select">Land</label>
+    <select name="country" id="ctrl_1" class="select">
+        <?= $options ?>
+    </select>
+</div>
+
+<!-- TEMPLATE END: vendor/contao/core-bundle/src/Resources/contao/templates/forms/form_select.html5 -->
+
+<!-- TEMPLATE START: vendor/contao/core-bundle/src/Resources/contao/templates/forms/form_submit.html5 -->
+
+<div class="widget widget-submit">
+    
+        <button type="submit" id="ctrl_2" class="submit">go</button>
+  </div>
+
+<!-- TEMPLATE END: vendor/contao/core-bundle/src/Resources/contao/templates/forms/form_submit.html5 -->
+    </div>
+  </form>
+
+
+<?php
+
+
+$m = "nix";
+if( null !== \Input::get('country') ) {
+    $p = \Input::get('country'); 
+    $result = $this->Database->prepare("SELECT * FROM tl_distributors WHERE country=?")->execute($p);
+
+    $c = array();
+    while($result->next())
+    {
+    echo $result->title;
+    }
+
+}
+?>
+
+<button class="x" id="DE">de</button>
+<button class="x" id="AT">at</button>
+<script>
+$( ".x" ).click(function() {
+    var c = $(this).attr('id');
+    console.log(c);
+     $("#ctrl_1").val(c);
+    $( "form" ).submit();
+});
+</script>
+
+<?php $this->endblock(); ?>

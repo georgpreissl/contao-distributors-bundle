@@ -1,0 +1,14 @@
+services:
+    # Contao frontend module Georgpreissl\ContaoDistributorsBundle\Controller\FrontendModule\PetListingModuleController
+    Georgpreissl\ContaoDistributorsBundle\Controller\FrontendModule\PetListingModuleController:
+        arguments:
+            - '@session'
+        tags:
+            - { name: contao.frontend_module, category: pet_modules, template: mod_pet_listing_module, type: pet_listing_module }
+            - { name: container.service_subscriber }
+        public: true
+
+
+
+
+
